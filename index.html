@@ -498,23 +498,19 @@ textarea { resize: vertical; min-height: 68px; }
 // ══ APPLY CONFIG ══
 (function applyConfig() {
   const C = CONFIG;
-  // CSS variables
   const root = document.documentElement;
   Object.entries(C.colors).forEach(([k,v]) => root.style.setProperty('--'+k, v));
 
-  // Cover
   document.getElementById('cover-title').textContent    = C.coverTitle;
   document.getElementById('cover-subtitle').textContent = C.coverSubtitle;
   if (C.coverImageUrl) {
     document.getElementById('cover-bg').style.backgroundImage = `url('${C.coverImageUrl}')`;
   }
-  // Cover logo
   if (C.logoImageUrl) {
     const img = document.createElement('img');
     img.src = C.logoImageUrl; img.style.cssText='height:64px;margin-bottom:10px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.2)';
     document.getElementById('cover-logo').prepend(img);
   }
-  // Header logos
   ['admin','parent'].forEach(p => {
     const txt = document.getElementById(p+'-logo-text');
     txt.childNodes[0].textContent = C.systemName.replace('訂餐系統','').trim();
@@ -523,9 +519,7 @@ textarea { resize: vertical; min-height: 68px; }
       img.src = C.logoImageUrl; img.style.display='block';
     }
   });
-  // Page title
   document.title = C.systemName;
-  // Footer
   document.getElementById('footer-note').textContent = C.footerNote;
 })();
 
@@ -539,7 +533,6 @@ const firebaseConfig = {
   appId: "1:71382298772:web:97e27e131782df941cc481"
 };
 
-// Firebase SDK (loaded via CDN in <head>)
 let _db = null;
 async function getDb() {
   if (_db) return _db;
@@ -551,9 +544,7 @@ async function getDb() {
 }
 
 const KEYS = { students:'smart_students', txs:'smart_txs', pw:'smart_admin_pw' };
-const FB_DOC = 'smartmeal/data'; // single document store
 
-// Cache so we don't re-fetch everything on every small change
 let _cache = null;
 
 async function loadCloud() {
@@ -564,7 +555,7 @@ async function loadCloud() {
     _cache = snap.exists() ? snap.data() : {};
     return _cache;
   } catch(e) {
-    console.warn('Firebase read failed, using localStorage:', e);
+    console.warn('Firebase read failed:', e);
     return null;
   }
 }
@@ -583,16 +574,13 @@ async function saveCloud(data) {
 async function cGet(key) {
   if (!_cache) await loadCloud();
   if (_cache && _cache[key] !== undefined) return _cache[key];
-return null;
+  return null;
 }
 
 async function cSet(key, val) {
-  // update cache
+  if (!_cache) await loadCloud();
   if (!_cache) _cache = {};
   _cache[key] = val;
-  // save to localStorage as backup
-  localStorage.setItem(key, JSON.stringify(val));
-  // save full cache to Firebase
   await saveCloud(_cache);
 }
 
@@ -781,7 +769,6 @@ async function saveTx(){
   await cSet(KEYS.txs,S.txs);
   closeModal('modal-tx');
   renderDetail(S.sid);
-  // 扣款後檢查餘額
   if(txType==='deduct'){
     const newBal=bal(S.sid);
     if(newBal<200){ showLowBalAlert(S.sid, newBal); }
@@ -789,7 +776,6 @@ async function saveTx(){
 }
 async function delTx(tid){ if(!confirm('確定刪除此筆記錄？'))return; S.txs=S.txs.filter(t=>t.id!==tid); await cSet(KEYS.txs,S.txs); renderDetail(S.sid); }
 async function changePassword(){ const np=document.getElementById('new-pw').value; const cp=document.getElementById('confirm-pw').value; if(!np){alert('請輸入新密碼');return;} if(np!==cp){alert('兩次密碼不一致');return;} S.pw=np; await cSet(KEYS.pw,np); document.getElementById('new-pw').value=''; document.getElementById('confirm-pw').value=''; alert('✅ 密碼已更改！'); }
-
 
 // ══ LOW BALANCE ALERT ══
 let _lowBalSid = null;
@@ -848,23 +834,22 @@ function copyText(text,msg){ navigator.clipboard.writeText(text).then(()=>alert(
 
 // ══ BOOT ══
 async function init() {
-  // Show loading overlay
-  document.getElementById('loading-overlay').style.display = 'flex';
+  const overlay = document.getElementById('loading-overlay');
+  if (overlay) overlay.style.display = 'flex';
 
   try {
-    // Load all data from cloud in one shot
     await loadCloud();
     S.students = (await cGet(KEYS.students)) || [];
     S.txs      = (await cGet(KEYS.txs))      || [];
     S.pw       = (await cGet(KEYS.pw))        || CONFIG.defaultPassword;
   } catch(e) {
     console.warn('Init error:', e);
-    S.students = JSON.parse(localStorage.getItem(KEYS.students)||'[]');
-    S.txs      = JSON.parse(localStorage.getItem(KEYS.txs)||'[]');
-    S.pw       = localStorage.getItem(KEYS.pw) || CONFIG.defaultPassword;
+    S.students = [];
+    S.txs      = [];
+    S.pw       = CONFIG.defaultPassword;
   }
 
-  document.getElementById('loading-overlay').style.display = 'none';
+  if (overlay) overlay.style.display = 'none';
 
   const code = new URLSearchParams(window.location.search).get('code');
   if (code) {
