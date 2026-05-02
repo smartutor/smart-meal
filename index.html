@@ -583,8 +583,7 @@ async function saveCloud(data) {
 async function cGet(key) {
   if (!_cache) await loadCloud();
   if (_cache && _cache[key] !== undefined) return _cache[key];
-  // fallback localStorage
-  const v = localStorage.getItem(key); return v ? JSON.parse(v) : null;
+return null;
 }
 
 async function cSet(key, val) {
