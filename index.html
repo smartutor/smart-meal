@@ -848,19 +848,20 @@ function copyText(text,msg){ navigator.clipboard.writeText(text).then(()=>alert(
 
 // ══ BOOT ══
 async function init() {
+  // Show loading overlay
   document.getElementById('loading-overlay').style.display = 'flex';
 
   try {
+    // Load all data from cloud in one shot
     await loadCloud();
     S.students = (await cGet(KEYS.students)) || [];
     S.txs      = (await cGet(KEYS.txs))      || [];
     S.pw       = (await cGet(KEYS.pw))        || CONFIG.defaultPassword;
-    document.title = '✅載入成功 ' + S.students.length + '人';
   } catch(e) {
-    document.title = '❌錯誤:' + e.message;
-    S.students = [];
-    S.txs      = [];
-    S.pw       = CONFIG.defaultPassword;
+    console.warn('Init error:', e);
+    S.students = JSON.parse(localStorage.getItem(KEYS.students)||'[]');
+    S.txs      = JSON.parse(localStorage.getItem(KEYS.txs)||'[]');
+    S.pw       = localStorage.getItem(KEYS.pw) || CONFIG.defaultPassword;
   }
 
   document.getElementById('loading-overlay').style.display = 'none';
