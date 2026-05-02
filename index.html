@@ -6,26 +6,57 @@
 <title>思馬特訂餐系統</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║          🌸 思馬特訂餐系統 — 個人設定區                        ║
+   ║  只需要修改這個區域，不用動下面的程式碼！                         ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
 const CONFIG = {
+
+  /* ── 系統名稱 ── */
   systemName:   "思馬特訂餐系統",
   systemSlogan: "每一餐，都是愛 🍱",
+
+  /* ── 管理員預設密碼（第一次用完請到「設定」頁更改）── */
   defaultPassword: "smart2025",
+
+  /* ── 封面圖片（貓狗照、班級照都可以放這裡）──
+     把圖片上傳到網路後，把網址貼到下面兩個引號之間
+     留空白就顯示預設漸層背景                         */
   coverImageUrl: "",
+
+  /* ── Logo 圖片網址 ──
+     把你的 Logo 上傳後貼網址，留空則顯示文字 Logo     */
   logoImageUrl: "",
+
+  /* ── 封面文字（顯示在圖片上方）── */
   coverTitle:    "思馬特",
   coverSubtitle: "訂 餐 系 統",
+
+  /* ── 主題色（奶茶風預設，可以改色碼）──
+     primary   主要按鈕、強調色
+     secondary 次要色、淡底色
+     accent    標題、深色文字
+     bg        整體背景色
+     card      卡片背景                               */
   colors: {
-    primary:   "#c07f4e",
-    secondary: "#f5ede3",
-    accent:    "#7a4f2e",
-    bg:        "#fdf8f3",
-    card:      "#ffffff",
-    success:   "#6a9e6e",
-    warning:   "#d4973a",
-    danger:    "#c05a5a",
+    primary:   "#c07f4e",   /* 焦糖棕 */
+    secondary: "#f5ede3",   /* 奶油米 */
+    accent:    "#7a4f2e",   /* 深棕   */
+    bg:        "#fdf8f3",   /* 米白底 */
+    card:      "#ffffff",   /* 純白卡片 */
+    success:   "#6a9e6e",   /* 草綠（正常）*/
+    warning:   "#d4973a",   /* 蜂蜜橘（偏低）*/
+    danger:    "#c05a5a",   /* 磚紅（不足）*/
   },
+
+  /* ── 底部小字 ── */
   footerNote: "© 思馬特家教班",
 };
+
+/* ════════════════════════════════════════
+   以下程式碼請勿修改
+   ════════════════════════════════════════ */
 </script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
