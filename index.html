@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>思馬特訂餐系統</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║          🌸 思馬特訂餐系統 — 個人設定區                        ║
+   ║  只需要修改這個區域，不用動下面的程式碼！                         ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
+const CONFIG = {
+
+  /* ── 系統名稱 ── */
+  systemName:   "思馬特訂餐系統",
+  systemSlogan: "每一餐，都是愛 🍱",
+
+  /* ── 管理員預設密碼（第一次用完請到「設定」頁更改）── */
+  defaultPassword: "smart2025",
+
+  /* ── 封面圖片（貓狗照、班級照都可以放這裡）──
+     把圖片上傳到網路後，把網址貼到下面兩個引號之間
+     留空白就顯示預設漸層背景                         */
+  coverImageUrl: "",
+
+  /* ── Logo 圖片網址 ──
+     把你的 Logo 上傳後貼網址，留空則顯示文字 Logo     */
+  logoImageUrl: "",
+
+  /* ── 封面文字（顯示在圖片上方）── */
+  coverTitle:    "思馬特",
+  coverSubtitle: "訂 餐 系 統",
+
+  /* ── 主題色（奶茶風預設，可以改色碼）──
+     --color-primary   主要按鈕、強調色
+     --color-secondary 次要色、淡底色
+     --color-accent    標題、深色文字
+     --color-bg        整體背景色
+     --color-card      卡片背景                       */
+  colors: {
+    primary:   "#c07f4e",   /* 焦糖棕 */
+    secondary: "#f5ede3",   /* 奶油米 */
+    accent:    "#7a4f2e",   /* 深棕   */
+    bg:        "#fdf8f3",   /* 米白底 */
+    card:      "#ffffff",   /* 純白卡片 */
+    success:   "#6a9e6e",   /* 草綠（正常）*/
+    warning:   "#d4973a",   /* 蜂蜜橘（偏低）*/
+    danger:    "#c05a5a",   /* 磚紅（不足）*/
+  },
+
+  /* ── 底部小字 ── */
+  footerNote: "© 思馬特家教班",
+};
+
+/* ════════════════════════════════════════
+   以下程式碼請勿修改
+   ════════════════════════════════════════ */
+</script>
+<style id="theme-style">/* 由 JS 填入 */</style>
+<style>
+/* ══ BASE ══ */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--accent); }
+
+/* ══ ROUTER ══ */
+#router { position: fixed; inset: 0; overflow: hidden; }
+.page {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  background: var(--bg);
+  padding-bottom: 90px;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
+  will-change: transform;
+}
+.page.active { transform: translateX(0); }
+#page-login  { transform: translateX(0); }
+
+/* ══ LOGIN PAGE ══ */
+#page-login {
+  display: flex; flex-direction: column;
+  align-items: center; padding: 0 0 40px;
+  min-height: 100%;
+}
+
+/* Cover photo area */
+.cover-area {
+  width: 100%; min-height: 220px;
+  background: linear-gradient(135deg, var(--primary) 0%, #e8b88a 50%, #f5d9b8 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  padding: 24px 20px 28px;
+  position: relative; overflow: hidden;
+}
+.cover-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0.55;
+}
+.cover-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(120,70,30,0.15) 0%, rgba(120,70,30,0.5) 100%);
+}
+.cover-logo {
+  position: relative; z-index: 2;
+  text-align: center;
+}
+.cover-logo img { height: 64px; margin-bottom: 10px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+.cover-title    { font-size: 34px; font-weight: 900; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.25); letter-spacing: -0.01em; }
+.cover-subtitle { font-size: 13px; color: rgba(255,255,255,0.88); letter-spacing: 0.14em; margin-top: 4px; }
+
+/* Login card */
+.login-wrap { width: 100%; max-width: 400px; padding: 24px 20px 0; }
+.login-card {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 26px 22px;
+  box-shadow: 0 4px 24px rgba(120,80,40,0.10);
+  border: 1px solid var(--secondary);
+}
+.login-section-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; text-align: center; color: var(--accent); }
+.login-divider { display: flex; align-items: center; gap: 10px; color: var(--primary); font-size: 11px; margin: 18px 0; opacity: 0.6; }
+.login-divider::before,.login-divider::after { content:''; flex:1; height:1px; background: var(--secondary); }
+
+/* ══ HEADER ══ */
+.header {
+  background: var(--card);
+  padding: 16px 18px 12px;
+  border-bottom: 2px solid var(--secondary);
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 12px rgba(120,80,40,0.07);
+}
+.header-row { display: flex; justify-content: space-between; align-items: center; }
+.header-logo { display: flex; align-items: center; gap: 10px; }
+.header-logo img { height: 36px; border-radius: 8px; }
+.header-logo-text { font-size: 16px; font-weight: 900; color: var(--primary); }
+.header-logo-text small { display: block; font-size: 10px; font-weight: 400; color: var(--primary); opacity: 0.65; letter-spacing: 0.06em; }
+.mode-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 600; }
+.mode-badge.admin { background: var(--secondary); color: var(--accent); }
+.mode-badge.parent { background: #eef5ee; color: #4a7a4e; }
+
+/* ══ FORMS ══ */
+.form-group { margin-bottom: 12px; }
+label { font-size: 10px; color: var(--primary); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 5px; }
+input, textarea, select {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid #e8d9cc; border-radius: 12px;
+  font-size: 15px; font-family: 'Noto Sans TC',sans-serif;
+  background: var(--bg); color: var(--accent); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(192,127,78,0.12);
+}
+select option { background: #fff; }
+textarea { resize: vertical; min-height: 68px; }
+
+.btn {
+  display: block; width: 100%; padding: 13px;
+  border-radius: 14px; font-size: 15px; font-weight: 700;
+  font-family: 'Noto Sans TC',sans-serif;
+  border: none; cursor: pointer; transition: all 0.15s;
+}
+.btn:active { transform: scale(0.97); opacity: 0.88; }
+.btn-primary { background: var(--primary); color: #fff; box-shadow: 0 3px 12px rgba(192,127,78,0.32); }
+.btn-success { background: var(--success); color: #fff; box-shadow: 0 3px 12px rgba(106,158,110,0.28); }
+.btn-danger  { background: var(--danger);  color: #fff; }
+.btn-ghost   { background: transparent; border: 1.5px solid #e0cfc0; color: var(--primary); }
+.btn-sm      { padding: 8px 13px; font-size: 12px; width: auto; display: inline-block; border-radius: 10px; }
+.btn + .btn  { margin-top: 9px; }
+
+/* ══ TABS ══ */
+.tabs { display:flex; background: var(--card); border-bottom: 2px solid var(--secondary); overflow-x:auto; }
+.tab {
+  padding: 13px 18px; font-size: 13px; font-weight: 600;
+  color: #b09080; border: none; background: none; cursor: pointer;
+  border-bottom: 3px solid transparent; white-space: nowrap;
+  font-family: 'Noto Sans TC',sans-serif; transition: all 0.18s;
+}
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+/* ══ VIEWS ══ */
+.view { display: none; padding: 14px; }
+.view.active { display: block; }
+
+/* ══ STATS ══ */
+.stats-row { display:flex; gap:10px; margin:14px 0; }
+.stat-card {
+  flex:1; background: var(--card);
+  border: 1px solid var(--secondary); border-radius: 16px; padding:14px;
+  text-align:center; box-shadow: 0 2px 8px rgba(120,80,40,0.06);
+}
+.stat-val   { font-family:'DM Mono',monospace; font-size:20px; font-weight:500; color: var(--primary); }
+.stat-label { font-size:10px; color:#b09080; margin-top:3px; }
+
+/* ══ STUDENT CARDS ══ */
+.student-card {
+  background: var(--card); border: 1px solid var(--secondary);
+  border-radius: 18px; padding: 16px; margin-bottom: 12px;
+  cursor: pointer; transition: all 0.18s;
+  box-shadow: 0 2px 10px rgba(120,80,40,0.06);
+}
+.student-card:active { transform: scale(0.98); }
+.student-card:hover  { border-color: var(--primary); box-shadow: 0 4px 16px rgba(192,127,78,0.14); }
+.student-name  { font-size: 17px; font-weight: 700; color: var(--accent); }
+.student-note  { font-size: 12px; color: #b09080; margin-top: 2px; }
+.balance-row   { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--secondary); display:flex; justify-content:space-between; align-items:flex-end; }
+.balance-amount{ font-family:'DM Mono',monospace; font-size:24px; font-weight:500; }
+.balance-label { font-size:10px; color:#b09080; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:2px; }
+.positive { color: var(--success); }
+.warning  { color: var(--warning); }
+.negative { color: var(--danger); }
+
+.badge { font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; }
+.badge-ok     { background:#edf6ee; color: var(--success); border:1px solid #b8debb; }
+.badge-warn   { background:#fef5e7; color: var(--warning); border:1px solid #f0d090; }
+.badge-danger { background:#fdeaea; color: var(--danger);  border:1px solid #f0b8b8; }
+
+/* ══ TX CARDS ══ */
+.tx-card {
+  background: var(--card); border: 1px solid var(--secondary);
+  border-radius: 14px; padding: 13px 15px; margin-bottom: 8px;
+  display:flex; align-items:center; gap:13px;
+  box-shadow: 0 1px 6px rgba(120,80,40,0.05);
+}
+.tx-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.tx-icon.top-up { background: #edf6ee; }
+.tx-icon.deduct { background: #fdeaea; }
+.tx-info { flex:1; min-width:0; }
+.tx-desc { font-size:14px; font-weight:600; color: var(--accent); }
+.tx-date { font-size:11px; color:#b09080; font-family:'DM Mono',monospace; margin-top:2px; }
+.tx-note { font-size:11px; color:#b09080; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tx-amount { font-family:'DM Mono',monospace; font-size:16px; font-weight:600; flex-shrink:0; }
+.tx-amount.top-up { color: var(--success); }
+.tx-amount.deduct { color: var(--danger); }
+
+/* ══ DETAIL ══ */
+.detail-header  { background:var(--card); border:1px solid var(--secondary); border-radius:18px; padding:18px; margin-bottom:13px; box-shadow:0 2px 10px rgba(120,80,40,0.06); }
+.detail-name    { font-size:22px; font-weight:900; color: var(--accent); }
+.detail-note    { font-size:13px; color:#b09080; margin-top:3px; }
+.detail-balance { margin-top:14px; padding-top:14px; border-top:1px solid var(--secondary); }
+.balance-big    { font-family:'DM Mono',monospace; font-size:40px; font-weight:500; }
+.action-row     { display:flex; gap:10px; margin-bottom:13px; }
+.action-row .btn{ flex:1; }
+.section-title  { font-size:11px; letter-spacing:0.1em; color:#b09080; text-transform:uppercase; font-weight:700; margin:16px 0 9px; }
+.back-btn       { display:flex; align-items:center; gap:6px; font-size:14px; color:var(--primary); background:none; border:none; cursor:pointer; padding:0; margin-bottom:14px; font-family:'Noto Sans TC',sans-serif; font-weight:600; }
+.parent-code-box{ background:var(--secondary); border:1px solid #e0cfc0; border-radius:10px; padding:11px 14px; font-family:'DM Mono',monospace; font-size:12px; color:var(--accent); text-align:center; word-break:break-all; }
+.share-row      { display:flex; gap:8px; margin-top:10px; }
+.share-row .btn { flex:1; font-size:12px; padding:9px 6px; }
+
+/* ══ PARENT PAGE ══ */
+.parent-hero {
+  background: linear-gradient(135deg, var(--primary) 0%, #e8a870 100%);
+  border-radius: 20px; padding: 24px 20px;
+  text-align: center; margin: 14px 14px 0;
+  box-shadow: 0 4px 20px rgba(192,127,78,0.28);
+  color: #fff;
+}
+.parent-name      { font-size: 26px; font-weight: 900; }
+.parent-bal-label { font-size: 10px; opacity: 0.82; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 14px; }
+.parent-bal       { font-family:'DM Mono',monospace; font-size: 48px; font-weight: 500; line-height: 1.1; }
+.parent-note      { font-size: 12px; opacity: 0.8; margin-top: 6px; }
+.parent-bal.positive { color: #fff; }
+.parent-bal.warning  { color: #ffe8a0; }
+.parent-bal.negative { color: #ffb8b8; }
+
+/* ══ MODAL ══ */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(80,40,10,0.4); z-index:200; align-items:flex-end; }
+.modal-overlay.open { display:flex; }
+.modal {
+  background: var(--card); border-radius: 28px 28px 0 0;
+  border-top: 3px solid var(--secondary);
+  padding: 18px 20px 50px; width: 100%;
+  max-height: 90vh; overflow-y: auto;
+  animation: slideUp 0.24s ease;
+  box-shadow: 0 -4px 32px rgba(120,80,40,0.14);
+}
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.modal-handle { width:40px; height:4px; background:#e0cfc0; border-radius:2px; margin:0 auto 18px; }
+.modal-title  { font-size:18px; font-weight:700; margin-bottom:18px; color: var(--accent); }
+
+/* ══ MISC ══ */
+.empty-state { text-align:center; padding:44px 20px; color:#c0a890; font-size:14px; }
+.empty-icon  { font-size:44px; margin-bottom:10px; }
+.error-box   { background:#fdeaea; border:1px solid #f0b8b8; border-radius:10px; padding:11px 13px; font-size:13px; color:var(--danger); margin-bottom:12px; }
+.delete-link { background:none; border:none; color:var(--danger); font-size:12px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; opacity:0.7; padding:0; }
+.footer-note { text-align:center; font-size:11px; color:#c0a890; padding:20px 0 8px; }
+
+.fab {
+  position:fixed; bottom:24px; right:20px;
+  width:56px; height:56px; border-radius:50%;
+  background: var(--primary); color:#fff;
+  font-size:26px; font-weight:700; border:none; cursor:pointer;
+  box-shadow: 0 4px 20px rgba(192,127,78,0.42);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform 0.13s; z-index:50;
+}
+.fab:active { transform:scale(0.91); }
+</style>
+</head>
+<body>
+<div id="router">
+
+<!-- ══ PAGE: LOGIN ══ -->
+<div id="page-login" class="page active">
+
+  <!-- Cover -->
+  <div class="cover-area" id="cover-area">
+    <div class="cover-bg" id="cover-bg"></div>
+    <div class="cover-overlay"></div>
+    <div class="cover-logo" id="cover-logo">
+      <!-- logo img injected by JS if set -->
+      <div class="cover-title"  id="cover-title"></div>
+      <div class="cover-subtitle" id="cover-subtitle"></div>
+    </div>
+  </div>
+
+  <div class="login-wrap">
+    <div class="login-card">
+      <div id="login-error" class="error-box" style="display:none"></div>
+
+      <div class="login-section-title">👤 管理員登入</div>
+      <div class="form-group">
+        <label>管理員密碼</label>
+        <input type="password" id="input-admin-pw" placeholder="請輸入密碼"
+               onkeydown="if(event.key==='Enter')doAdminLogin()">
+      </div>
+      <button class="btn btn-primary" onclick="doAdminLogin()">進入管理後台 →</button>
+
+      <div class="login-divider">或</div>
+
+      <div class="login-section-title">🏠 家長餐費查詢</div>
+      <div class="form-group">
+        <label>家長專屬代碼</label>
+        <input type="text" id="input-parent-code" placeholder="輸入老師給你的代碼"
+               onkeydown="if(event.key==='Enter')doParentLogin()" autocapitalize="none">
+      </div>
+      <button class="btn btn-ghost" onclick="doParentLogin()">查詢孩子餐費 →</button>
+    </div>
+
+    <!-- 儲值說明卡片 -->
+    <div style="background:var(--card);border:1.5px solid #e8d9cc;border-radius:20px;padding:20px 20px 18px;margin-top:16px;box-shadow:0 2px 10px rgba(120,80,40,0.07)">
+      <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+        💳 餐費儲值方式
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--secondary);border-radius:10px;padding:10px 14px">
+          <span style="font-size:12px;color:#b09080;font-weight:600">銀行</span>
+          <span style="font-size:15px;font-weight:700;color:var(--accent);font-family:'DM Mono',monospace">中信 822</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--secondary);border-radius:10px;padding:10px 14px">
+          <span style="font-size:12px;color:#b09080;font-weight:600">帳號</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:15px;font-weight:700;color:var(--accent);font-family:'DM Mono',monospace">190540150003</span>
+            <button onclick="copyText('190540150003','已複製帳號！')" style="background:var(--primary);color:#fff;border:none;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif">複製</button>
+          </div>
+        </div>
+        <div style="background:#fff8f0;border:1px solid #f0d8b8;border-radius:10px;padding:10px 14px">
+          <div style="font-size:12px;color:var(--warning);font-weight:700;margin-bottom:3px">📌 注意事項</div>
+          <div style="font-size:12px;color:#9a6840;line-height:1.7">
+            單次儲值以 <strong>$1,000</strong> 為單位<br>
+            轉帳後請私訊末五碼
+          </div>
+        </div>
+        <div style="background:#fdeaea;border:1px solid #f0b8b8;border-radius:10px;padding:10px 14px;margin-top:8px">
+          <div style="font-size:12px;color:#c05a5a;font-weight:700;line-height:1.7">
+            ⚠️ 餘額不足 $200 將寄信通知，若未儲值不予訂餐
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note" id="footer-note"></div>
+  </div>
+</div>
+
+<!-- ══ PAGE: ADMIN ══ -->
+<div id="page-admin" class="page">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-logo">
+        <img id="admin-logo-img" src="" style="display:none">
+        <div class="header-logo-text" id="admin-logo-text">
+          載入中<small>管理後台</small>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="mode-badge admin">管理員</span>
+        <button class="btn btn-ghost btn-sm" onclick="doLogout()" style="padding:5px 10px">登出</button>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('students')">學生總覽</button>
+    <button class="tab"        onclick="switchTab('log')">所有明細</button>
+    <button class="tab"        onclick="switchTab('settings')">設定</button>
+  </div>
+  <div id="view-students" class="view active">
+    <div id="admin-stats" class="stats-row"></div>
+    <div id="student-list"></div>
+  </div>
+  <div id="view-log" class="view">
+    <div id="all-log" style="margin-top:6px"></div>
+  </div>
+  <div id="view-settings" class="view">
+    <div class="section-title">更改管理員密碼</div>
+    <div class="detail-header">
+      <div class="form-group"><label>新密碼</label><input type="password" id="new-pw" placeholder="輸入新密碼"></div>
+      <div class="form-group"><label>確認新密碼</label><input type="password" id="confirm-pw" placeholder="再次輸入"></div>
+      <button class="btn btn-primary" onclick="changePassword()">更改密碼</button>
+    </div>
+    <div class="section-title">說明</div>
+    <div class="detail-header" style="font-size:13px;color:#b09080;line-height:1.9">
+      每位學生有專屬代碼，進入學生詳情可複製代碼或連結給家長。<br>
+      家長輸入代碼後只能查看自己孩子的資料，無法編輯任何內容。<br><br>
+      想修改系統名稱、配色、封面圖片或 Logo，請用文字編輯器打開 HTML 檔案，修改最頂端的 <strong>CONFIG</strong> 區域。
+    </div>
+  </div>
+  <div id="view-detail" class="view">
+    <button class="back-btn" onclick="backToList()">← 返回列表</button>
+    <div id="detail-content"></div>
+  </div>
+  <button class="fab" id="main-fab" onclick="openAddStudent()">＋</button>
+</div>
+
+<!-- ══ PAGE: PARENT ══ -->
+<div id="page-parent" class="page">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-logo">
+        <img id="parent-logo-img" src="" style="display:none">
+        <div class="header-logo-text" id="parent-logo-text">
+          載入中<small>家長查詢</small>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()" style="padding:5px 10px">登出</button>
+    </div>
+  </div>
+  <div id="parent-content"></div>
+</div>
+
+
+<!-- Modal: Low Balance Alert -->
+<div class="modal-overlay" id="modal-lowbal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-size:44px;margin-bottom:8px">⚠️</div>
+      <div class="modal-title" style="margin-bottom:4px" id="lowbal-title">餘額不足通知</div>
+      <div style="font-size:13px;color:#b09080" id="lowbal-desc"></div>
+    </div>
+    <div style="background:#fff8f0;border:1px solid #f0d8b8;border-radius:12px;padding:14px;margin-bottom:18px;font-size:13px;color:#9a6840;line-height:1.8" id="lowbal-preview"></div>
+    <button class="btn btn-primary" id="lowbal-gmail-btn" onclick="openGmailDraft()">📧 開啟 Gmail 草稿</button>
+    <button class="btn btn-ghost" onclick="closeModal('modal-lowbal')" style="margin-top:10px">稍後再說</button>
+  </div>
+</div>
+</div><!-- /router -->
+
+<!-- Modal: Add Student -->
+<div class="modal-overlay" id="modal-student">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">新增學生 🌱</div>
+    <div id="student-form-error" class="error-box" style="display:none"></div>
+    <div class="form-group"><label>學生姓名 *</label><input type="text" id="input-name" placeholder="請輸入姓名"></div>
+    <div class="form-group"><label>家長 Email（餘額不足時通知用）</label><input type="email" id="input-email" placeholder="例：parent@gmail.com"></div>
+    <div class="form-group"><label>備註</label><textarea id="input-note" placeholder="過敏食材、特殊需求等…"></textarea></div>
+    <button class="btn btn-primary" onclick="saveStudent()">新增學生</button>
+    <button class="btn btn-ghost"   onclick="closeModal('modal-student')">取消</button>
+  </div>
+</div>
+
+<!-- Modal: Transaction -->
+<div class="modal-overlay" id="modal-tx">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="tx-modal-title">新增交易</div>
+    <div id="tx-form-error" class="error-box" style="display:none"></div>
+    <div class="form-group"><label>類型</label>
+      <select id="tx-type">
+        <option value="top-up">💰 儲值（加值）</option>
+        <option value="deduct">🍽 扣款（餐費）</option>
+      </select>
+    </div>
+    <div class="form-group"><label>金額（元）*</label><input type="number" id="tx-amount" placeholder="0" min="1" inputmode="numeric"></div>
+    <div class="form-group"><label>日期 *</label><input type="date" id="tx-date"></div>
+    <div class="form-group"><label>備註</label><input type="text" id="tx-note" placeholder="選填"></div>
+    <button class="btn btn-primary" onclick="saveTx()">確認</button>
+    <button class="btn btn-ghost"   onclick="closeModal('modal-tx')">取消</button>
+  </div>
+</div>
+
+<script>
+// ══ APPLY CONFIG ══
+(function applyConfig() {
+  const C = CONFIG;
+  // CSS variables
+  const root = document.documentElement;
+  Object.entries(C.colors).forEach(([k,v]) => root.style.setProperty('--'+k, v));
+
+  // Cover
+  document.getElementById('cover-title').textContent    = C.coverTitle;
+  document.getElementById('cover-subtitle').textContent = C.coverSubtitle;
+  if (C.coverImageUrl) {
+    document.getElementById('cover-bg').style.backgroundImage = `url('${C.coverImageUrl}')`;
+  }
+  // Cover logo
+  if (C.logoImageUrl) {
+    const img = document.createElement('img');
+    img.src = C.logoImageUrl; img.style.cssText='height:64px;margin-bottom:10px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.2)';
+    document.getElementById('cover-logo').prepend(img);
+  }
+  // Header logos
+  ['admin','parent'].forEach(p => {
+    const txt = document.getElementById(p+'-logo-text');
+    txt.childNodes[0].textContent = C.systemName.replace('訂餐系統','').trim();
+    if (C.logoImageUrl) {
+      const img = document.getElementById(p+'-logo-img');
+      img.src = C.logoImageUrl; img.style.display='block';
+    }
+  });
+  // Page title
+  document.title = C.systemName;
+  // Footer
+  document.getElementById('footer-note').textContent = C.footerNote;
+})();
+
+// ══ FIREBASE ══
+const firebaseConfig = {
+  apiKey: "AIzaSyAaEspVnjvAit5rS-B6_4oCVqrJ3AlmE-Y",
+  authDomain: "smart-meal-94e36.firebaseapp.com",
+  projectId: "smart-meal-94e36",
+  storageBucket: "smart-meal-94e36.firebasestorage.app",
+  messagingSenderId: "71382298772",
+  appId: "1:71382298772:web:97e27e131782df941cc481"
+};
+
+// Firebase SDK (loaded via CDN in <head>)
+let _db = null;
+async function getDb() {
+  if (_db) return _db;
+  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+  const { getFirestore, doc, getDoc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+  const app = initializeApp(firebaseConfig);
+  _db = { fs: getFirestore(app), doc, getDoc, setDoc };
+  return _db;
+}
+
+const KEYS = { students:'smart_students', txs:'smart_txs', pw:'smart_admin_pw' };
+const FB_DOC = 'smartmeal/data'; // single document store
+
+// Cache so we don't re-fetch everything on every small change
+let _cache = null;
+
+async function loadCloud() {
+  try {
+    const db = await getDb();
+    const ref = db.doc(db.fs, 'smartmeal', 'data');
+    const snap = await db.getDoc(ref);
+    _cache = snap.exists() ? snap.data() : {};
+    return _cache;
+  } catch(e) {
+    console.warn('Firebase read failed, using localStorage:', e);
+    return null;
+  }
+}
+
+async function saveCloud(data) {
+  try {
+    const db = await getDb();
+    const ref = db.doc(db.fs, 'smartmeal', 'data');
+    await db.setDoc(ref, data);
+    _cache = data;
+  } catch(e) {
+    console.warn('Firebase write failed:', e);
+  }
+}
+
+async function cGet(key) {
+  if (!_cache) await loadCloud();
+  if (_cache && _cache[key] !== undefined) return _cache[key];
+  // fallback localStorage
+  const v = localStorage.getItem(key); return v ? JSON.parse(v) : null;
+}
+
+async function cSet(key, val) {
+  // update cache
+  if (!_cache) _cache = {};
+  _cache[key] = val;
+  // save to localStorage as backup
+  localStorage.setItem(key, JSON.stringify(val));
+  // save full cache to Firebase
+  await saveCloud(_cache);
+}
+
+// ══ STATE ══
+let S = { students:[], txs:[], pw:CONFIG.defaultPassword, mode:null, sid:null, tab:'students' };
+
+// ══ ROUTER ══
+let _cur = 'login';
+function goTo(next) {
+  if (next===_cur) return;
+  const order=['login','admin','parent'];
+  const fwd = order.indexOf(next) >= order.indexOf(_cur);
+  const fromEl=document.getElementById('page-'+_cur);
+  const toEl  =document.getElementById('page-'+next);
+  toEl.style.transition='none';
+  toEl.style.transform = fwd?'translateX(100%)':'translateX(-30%)';
+  toEl.classList.add('active');
+  void toEl.offsetWidth;
+  const T='transform 0.32s cubic-bezier(0.32,0.72,0,1)';
+  toEl.style.transition=T; toEl.style.transform='translateX(0)';
+  fromEl.style.transition=T; fromEl.style.transform=fwd?'translateX(-30%)':'translateX(100%)';
+  setTimeout(()=>{ fromEl.classList.remove('active'); fromEl.style.transition=''; },340);
+  _cur=next;
+}
+
+// ══ AUTH ══
+function doAdminLogin() {
+  const pw=document.getElementById('input-admin-pw').value;
+  if (pw===S.pw) { S.mode='admin'; goTo('admin'); switchTab('students'); }
+  else { showErr('login-error','密碼錯誤，請重新輸入'); document.getElementById('input-admin-pw').value=''; }
+}
+function doParentLogin() {
+  const code=document.getElementById('input-parent-code').value.trim().toLowerCase();
+  if (!code){showErr('login-error','請輸入家長代碼');return;}
+  const st=S.students.find(s=>s.code===code);
+  if (!st){showErr('login-error','找不到此代碼，請確認老師給你的代碼');return;}
+  S.mode='parent'; S.sid=st.id; goTo('parent'); renderParent(st.id);
+}
+function doLogout() {
+  S.mode=null; S.sid=null;
+  document.getElementById('input-admin-pw').value='';
+  document.getElementById('input-parent-code').value='';
+  document.getElementById('login-error').style.display='none';
+  goTo('login');
+}
+
+// ══ TABS ══
+function switchTab(tab) {
+  S.tab=tab;
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['students','log','settings'][i]===tab));
+  ['students','log','settings','detail'].forEach(v=>document.getElementById('view-'+v).classList.remove('active'));
+  document.getElementById('view-'+tab).classList.add('active');
+  document.getElementById('main-fab').style.display=tab==='students'?'flex':'none';
+  if(tab==='students') renderList();
+  if(tab==='log')      renderLog();
+}
+function showDetailView() {
+  ['students','log','settings','detail'].forEach(v=>document.getElementById('view-'+v).classList.remove('active'));
+  document.getElementById('view-detail').classList.add('active');
+  document.getElementById('main-fab').style.display='none';
+}
+function backToList() { S.sid=null; switchTab(S.tab==='log'?'log':'students'); document.getElementById('main-fab').style.display='flex'; }
+
+// ══ HELPERS ══
+function gid()  { return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
+function gcode(){ return Math.random().toString(36).slice(2,8); }
+function bal(sid){ return S.txs.filter(t=>t.sid===sid).reduce((s,t)=>t.type==='top-up'?s+t.amount:s-t.amount,0); }
+function bc(b)  { return b>200?'positive':b>=0?'warning':'negative'; }
+function fmtDate(d){ const dt=new Date(d+'T00:00:00'); return `${dt.getFullYear()}/${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')}`; }
+function today(){ return new Date().toISOString().slice(0,10); }
+function showErr(id,msg){ const el=document.getElementById(id); el.textContent=msg; el.style.display='block'; setTimeout(()=>el.style.display='none',3500); }
+function parentUrl(code){ const u=new URL(window.location.href.split('?')[0]); u.searchParams.set('code',code); return u.toString(); }
+
+// ══ RENDER — LIST ══
+function renderList() {
+  const total=S.students.reduce((s,st)=>s+bal(st.id),0);
+  const low=S.students.filter(st=>bal(st.id)<100).length;
+  document.getElementById('admin-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-val">${S.students.length}</div><div class="stat-label">學生人數</div></div>
+    <div class="stat-card"><div class="stat-val">$${total.toLocaleString()}</div><div class="stat-label">總餘額</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:${low>0?'var(--danger)':'var(--success)'}">${low}</div><div class="stat-label">餘額偏低</div></div>`;
+  const el=document.getElementById('student-list');
+  if (!S.students.length){ el.innerHTML=`<div class="empty-state"><div class="empty-icon">🌱</div>尚未新增學生<br>點右下角 ＋ 開始</div>`; return; }
+  el.innerHTML=S.students.map(st=>{
+    const b=bal(st.id),cl=bc(b);
+    const badge=b<0?'<span class="badge badge-danger">餘額不足</span>':b<100?'<span class="badge badge-warn">偏低</span>':'<span class="badge badge-ok">正常</span>';
+    return `<div class="student-card" onclick="showDetail('${st.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div class="student-name">${st.name}</div><div class="student-note">${st.note||'無備註'}</div></div>${badge}
+      </div>
+      <div class="balance-row">
+        <div><div class="balance-label">目前餘額</div><div class="balance-amount ${cl}">$${b.toLocaleString()}</div></div>
+        <div style="font-size:11px;color:#b09080">代碼：${st.code}</div>
+      </div></div>`;
+  }).join('');
+}
+
+// ══ RENDER — LOG ══
+function renderLog() {
+  const all=[...S.txs].sort((a,b)=>b.date.localeCompare(a.date));
+  const el=document.getElementById('all-log');
+  if (!all.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon">📋</div>尚無任何交易記錄</div>`;return;}
+  el.innerHTML=all.map(t=>{const st=S.students.find(s=>s.id===t.sid);return txCard(t,st?st.name:'(已刪除)',false);}).join('');
+}
+
+// ══ RENDER — DETAIL ══
+function showDetail(sid){ S.sid=sid; showDetailView(); renderDetail(sid); }
+function renderDetail(sid) {
+  const st=S.students.find(s=>s.id===sid);
+  if (!st){backToList();return;}
+  const b=bal(sid);
+  const txs=S.txs.filter(t=>t.sid===sid).sort((a,c)=>c.date.localeCompare(a.date));
+  const url=parentUrl(st.code);
+  document.getElementById('detail-content').innerHTML=`
+    <div class="detail-header">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div class="detail-name">${st.name}</div><div class="detail-note">${st.note||'無備註'}</div>${st.email?`<div class="detail-note" style="margin-top:2px">✉️ ${st.email}</div>`:''}</div>
+        <button class="delete-link" onclick="delStudent('${sid}')">刪除學生</button>
+      </div>
+      <div class="detail-balance">
+        <div class="balance-label">目前餘額</div>
+        <div class="balance-big ${bc(b)}">$${b.toLocaleString()}</div>
+      </div>
+      <div class="section-title" style="margin-top:14px">家長專屬連結</div>
+      <div class="parent-code-box">代碼：${st.code}</div>
+      <div class="share-row">
+        <button class="btn btn-ghost btn-sm" onclick="copyText('${st.code}','已複製代碼：${st.code}')">📋 複製代碼</button>
+        <button class="btn btn-ghost btn-sm" onclick="copyText(${JSON.stringify(url)},'已複製連結！')">🔗 複製連結</button>
+      </div>
+    </div>
+    <div class="action-row">
+      <button class="btn btn-success" onclick="openTx('${sid}','top-up')">💰 儲值</button>
+      <button class="btn btn-danger"  onclick="openTx('${sid}','deduct')">🍽 扣款</button>
+    </div>
+    <div class="section-title">交易明細（${txs.length} 筆）</div>
+    <div>${txs.length?txs.map(t=>txCard(t,'',true)).join(''):'<div class="empty-state"><div class="empty-icon">📄</div>尚無交易記錄</div>'}</div>`;
+}
+
+function txCard(t,label,showDel) {
+  const isTop=t.type==='top-up';
+  const right=showDel
+    ?`<div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px"><div class="tx-amount ${t.type}">${isTop?'+':'-'}$${t.amount.toLocaleString()}</div><button class="delete-link" onclick="delTx('${t.id}')">刪除</button></div>`
+    :`<div class="tx-amount ${t.type}">${isTop?'+':'-'}$${t.amount.toLocaleString()}</div>`;
+  return `<div class="tx-card">
+    <div class="tx-icon ${t.type}">${isTop?'💰':'🍽'}</div>
+    <div class="tx-info">
+      <div class="tx-desc">${label?label+' — ':''}${isTop?'儲值':'扣款（餐費）'}</div>
+      <div class="tx-date">${fmtDate(t.date)}</div>
+      ${t.note?`<div class="tx-note">${t.note}</div>`:''}
+    </div>${right}</div>`;
+}
+
+// ══ RENDER — PARENT ══
+function renderParent(sid) {
+  const st=S.students.find(s=>s.id===sid);
+  if (!st){doLogout();return;}
+  const b=bal(sid);
+  const txs=S.txs.filter(t=>t.sid===sid).sort((a,c)=>c.date.localeCompare(a.date));
+  document.getElementById('parent-content').innerHTML=`
+    <div class="parent-hero">
+      <div class="parent-name">🍱 ${st.name}</div>
+      ${st.note?`<div class="parent-note">${st.note}</div>`:''}
+      <div class="parent-bal-label">目前餐費餘額</div>
+      <div class="parent-bal ${bc(b)}">$${b.toLocaleString()}</div>
+      ${b<100?`<div style="margin-top:10px;font-size:13px;font-weight:700">${b<0?'⚠️ 餘額不足，請盡快儲值':'⚠️ 餘額偏低，建議儲值'}</div>`:''}
+    </div>
+    <div style="padding:14px">
+      <div class="section-title">交易明細（${txs.length} 筆）</div>
+      ${txs.length?txs.map(t=>txCard(t,'',false)).join(''):'<div class="empty-state"><div class="empty-icon">📄</div>尚無交易記錄</div>'}
+    </div>
+    <div class="footer-note">${CONFIG.footerNote}</div>`;
+}
+
+// ══ CRUD ══
+function openAddStudent(){ document.getElementById('input-name').value=''; document.getElementById('input-email').value=''; document.getElementById('input-note').value=''; document.getElementById('student-form-error').style.display='none'; openModal('modal-student'); }
+async function saveStudent(){ const name=document.getElementById('input-name').value.trim(); if(!name){showErr('student-form-error','請輸入學生姓名');return;} S.students.push({id:gid(),name,email:document.getElementById('input-email').value.trim(),note:document.getElementById('input-note').value.trim(),code:gcode()}); await cSet(KEYS.students,S.students); closeModal('modal-student'); renderList(); }
+async function delStudent(sid){ if(!confirm('確定刪除此學生及所有交易記錄？'))return; S.students=S.students.filter(s=>s.id!==sid); S.txs=S.txs.filter(t=>t.sid!==sid); await cSet(KEYS.students,S.students); await cSet(KEYS.txs,S.txs); backToList(); }
+function openTx(sid,type){ S.sid=sid; const st=S.students.find(s=>s.id===sid); document.getElementById('tx-type').value=type; document.getElementById('tx-amount').value=''; document.getElementById('tx-date').value=today(); document.getElementById('tx-note').value=''; document.getElementById('tx-modal-title').textContent=`${st.name} — ${type==='top-up'?'💰 儲值':'🍽 扣款'}`; document.getElementById('tx-form-error').style.display='none'; openModal('modal-tx'); }
+async function saveTx(){
+  const amount=parseInt(document.getElementById('tx-amount').value);
+  const date=document.getElementById('tx-date').value;
+  if(!amount||amount<=0){showErr('tx-form-error','請輸入有效金額');return;}
+  if(!date){showErr('tx-form-error','請選擇日期');return;}
+  const txType=document.getElementById('tx-type').value;
+  S.txs.push({id:gid(),sid:S.sid,type:txType,amount,date,note:document.getElementById('tx-note').value.trim()});
+  await cSet(KEYS.txs,S.txs);
+  closeModal('modal-tx');
+  renderDetail(S.sid);
+  // 扣款後檢查餘額
+  if(txType==='deduct'){
+    const newBal=bal(S.sid);
+    if(newBal<200){ showLowBalAlert(S.sid, newBal); }
+  }
+}
+async function delTx(tid){ if(!confirm('確定刪除此筆記錄？'))return; S.txs=S.txs.filter(t=>t.id!==tid); await cSet(KEYS.txs,S.txs); renderDetail(S.sid); }
+async function changePassword(){ const np=document.getElementById('new-pw').value; const cp=document.getElementById('confirm-pw').value; if(!np){alert('請輸入新密碼');return;} if(np!==cp){alert('兩次密碼不一致');return;} S.pw=np; await cSet(KEYS.pw,np); document.getElementById('new-pw').value=''; document.getElementById('confirm-pw').value=''; alert('✅ 密碼已更改！'); }
+
+
+// ══ LOW BALANCE ALERT ══
+let _lowBalSid = null;
+function showLowBalAlert(sid, currentBal) {
+  const st = S.students.find(s=>s.id===sid);
+  if (!st) return;
+  _lowBalSid = sid;
+  document.getElementById('lowbal-title').textContent = `${st.name} 餘額偏低`;
+  document.getElementById('lowbal-desc').textContent = `目前餘額 $${currentBal.toLocaleString()}，低於 $200`;
+
+  const hasEmail = st.email && st.email.includes('@');
+  const subject = encodeURIComponent(`【思馬特訂餐】${st.name} 餐費餘額不足通知`);
+  const body = encodeURIComponent(
+`親愛的家長您好，
+
+${st.name} 的餐費餘額目前為 $${currentBal.toLocaleString()}，已低於 $200，請記得儲值，以免影響訂餐。
+
+儲值方式：
+🏦 銀行：中信 822
+💳 帳號：190540150003
+📌 單次儲值以 $1,000 為單位，轉帳後請私訊末五碼
+
+感謝您的配合！
+思馬特家教班`
+  );
+
+  const previewText = `收件人：${hasEmail ? st.email : '（尚未填寫家長 email）'}
+主旨：【思馬特訂餐】${st.name} 餐費餘額不足通知
+
+親愛的家長您好，
+${st.name} 的餐費餘額目前為 $${currentBal.toLocaleString()}，已低於 $200，請記得儲值。`;
+  document.getElementById('lowbal-preview').style.whiteSpace='pre-line';
+  document.getElementById('lowbal-preview').textContent = previewText;
+
+  const btn = document.getElementById('lowbal-gmail-btn');
+  if (hasEmail) {
+    btn.style.opacity='1'; btn.style.pointerEvents='auto';
+    btn._gmailUrl = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(st.email)}&su=${subject}&body=${body}`;
+  } else {
+    btn.style.opacity='0.4'; btn.style.pointerEvents='none';
+    btn._gmailUrl = '';
+  }
+  openModal('modal-lowbal');
+}
+
+function openGmailDraft() {
+  const btn = document.getElementById('lowbal-gmail-btn');
+  if (btn._gmailUrl) window.open(btn._gmailUrl, '_blank');
+}
+
+// ══ MODALS ══
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el=>{ el.addEventListener('click',e=>{ if(e.target===el) el.classList.remove('open'); }); });
+function copyText(text,msg){ navigator.clipboard.writeText(text).then(()=>alert(msg)).catch(()=>alert(text)); }
+
+// ══ BOOT ══
+async function init() {
+  // Show loading overlay
+  document.getElementById('loading-overlay').style.display = 'flex';
+
+  try {
+    // Load all data from cloud in one shot
+    await loadCloud();
+    S.students = (await cGet(KEYS.students)) || [];
+    S.txs      = (await cGet(KEYS.txs))      || [];
+    S.pw       = (await cGet(KEYS.pw))        || CONFIG.defaultPassword;
+  } catch(e) {
+    console.warn('Init error:', e);
+    S.students = JSON.parse(localStorage.getItem(KEYS.students)||'[]');
+    S.txs      = JSON.parse(localStorage.getItem(KEYS.txs)||'[]');
+    S.pw       = localStorage.getItem(KEYS.pw) || CONFIG.defaultPassword;
+  }
+
+  document.getElementById('loading-overlay').style.display = 'none';
+
+  const code = new URLSearchParams(window.location.search).get('code');
+  if (code) {
+    const st=S.students.find(s=>s.code===code.toLowerCase());
+    if (st){ S.mode='parent'; S.sid=st.id; goTo('parent'); renderParent(st.id); return; }
+  }
+}
+init();
+</script>
+
+<!-- Loading overlay -->
+<div id="loading-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+  <div style="font-size:36px">🍱</div>
+  <div style="font-size:15px;font-weight:700;color:var(--primary)">連接雲端中…</div>
+  <div style="width:48px;height:4px;background:#e8d9cc;border-radius:2px;overflow:hidden">
+    <div style="height:100%;background:var(--primary);border-radius:2px;animation:loadbar 1.2s ease-in-out infinite"></div>
+  </div>
+</div>
+<style>
+@keyframes loadbar {
+  0%   { width:0%;   margin-left:0; }
+  50%  { width:80%;  margin-left:10%; }
+  100% { width:0%;   margin-left:100%; }
+}
+</style>
+</body>
+</html>
