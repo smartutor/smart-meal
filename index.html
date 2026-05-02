@@ -6,66 +6,31 @@
 <title>思馬特訂餐系統</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
-/* ╔══════════════════════════════════════════════════════════════╗
-   ║          🌸 思馬特訂餐系統 — 個人設定區                        ║
-   ║  只需要修改這個區域，不用動下面的程式碼！                         ║
-   ╚══════════════════════════════════════════════════════════════╝ */
-
 const CONFIG = {
-
-  /* ── 系統名稱 ── */
   systemName:   "思馬特訂餐系統",
   systemSlogan: "每一餐，都是愛 🍱",
-
-  /* ── 管理員預設密碼（第一次用完請到「設定」頁更改）── */
   defaultPassword: "smart2025",
-
-  /* ── 封面圖片（貓狗照、班級照都可以放這裡）──
-     把圖片上傳到網路後，把網址貼到下面兩個引號之間
-     留空白就顯示預設漸層背景                         */
   coverImageUrl: "",
-
-  /* ── Logo 圖片網址 ──
-     把你的 Logo 上傳後貼網址，留空則顯示文字 Logo     */
   logoImageUrl: "",
-
-  /* ── 封面文字（顯示在圖片上方）── */
   coverTitle:    "思馬特",
   coverSubtitle: "訂 餐 系 統",
-
-  /* ── 主題色（奶茶風預設，可以改色碼）──
-     --color-primary   主要按鈕、強調色
-     --color-secondary 次要色、淡底色
-     --color-accent    標題、深色文字
-     --color-bg        整體背景色
-     --color-card      卡片背景                       */
   colors: {
-    primary:   "#c07f4e",   /* 焦糖棕 */
-    secondary: "#f5ede3",   /* 奶油米 */
-    accent:    "#7a4f2e",   /* 深棕   */
-    bg:        "#fdf8f3",   /* 米白底 */
-    card:      "#ffffff",   /* 純白卡片 */
-    success:   "#6a9e6e",   /* 草綠（正常）*/
-    warning:   "#d4973a",   /* 蜂蜜橘（偏低）*/
-    danger:    "#c05a5a",   /* 磚紅（不足）*/
+    primary:   "#c07f4e",
+    secondary: "#f5ede3",
+    accent:    "#7a4f2e",
+    bg:        "#fdf8f3",
+    card:      "#ffffff",
+    success:   "#6a9e6e",
+    warning:   "#d4973a",
+    danger:    "#c05a5a",
   },
-
-  /* ── 底部小字 ── */
   footerNote: "© 思馬特家教班",
 };
-
-/* ════════════════════════════════════════
-   以下程式碼請勿修改
-   ════════════════════════════════════════ */
 </script>
-<style id="theme-style">/* 由 JS 填入 */</style>
 <style>
-/* ══ BASE ══ */
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; overflow: hidden; }
 body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--accent); }
-
-/* ══ ROUTER ══ */
 #router { position: fixed; inset: 0; overflow: hidden; }
 .page {
   position: absolute; inset: 0;
@@ -78,15 +43,11 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 }
 .page.active { transform: translateX(0); }
 #page-login  { transform: translateX(0); }
-
-/* ══ LOGIN PAGE ══ */
 #page-login {
   display: flex; flex-direction: column;
   align-items: center; padding: 0 0 40px;
   min-height: 100%;
 }
-
-/* Cover photo area */
 .cover-area {
   width: 100%; min-height: 220px;
   background: linear-gradient(135deg, var(--primary) 0%, #e8b88a 50%, #f5d9b8 100%);
@@ -95,44 +56,18 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
   padding: 24px 20px 28px;
   position: relative; overflow: hidden;
 }
-.cover-bg {
-  position: absolute; inset: 0;
-  background-size: cover; background-position: center;
-  opacity: 0.55;
-}
-.cover-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(120,70,30,0.15) 0%, rgba(120,70,30,0.5) 100%);
-}
-.cover-logo {
-  position: relative; z-index: 2;
-  text-align: center;
-}
+.cover-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.55; }
+.cover-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(120,70,30,0.15) 0%, rgba(120,70,30,0.5) 100%); }
+.cover-logo { position: relative; z-index: 2; text-align: center; }
 .cover-logo img { height: 64px; margin-bottom: 10px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
 .cover-title    { font-size: 34px; font-weight: 900; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.25); letter-spacing: -0.01em; }
 .cover-subtitle { font-size: 13px; color: rgba(255,255,255,0.88); letter-spacing: 0.14em; margin-top: 4px; }
-
-/* Login card */
 .login-wrap { width: 100%; max-width: 400px; padding: 24px 20px 0; }
-.login-card {
-  background: var(--card);
-  border-radius: 24px;
-  padding: 26px 22px;
-  box-shadow: 0 4px 24px rgba(120,80,40,0.10);
-  border: 1px solid var(--secondary);
-}
+.login-card { background: var(--card); border-radius: 24px; padding: 26px 22px; box-shadow: 0 4px 24px rgba(120,80,40,0.10); border: 1px solid var(--secondary); }
 .login-section-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; text-align: center; color: var(--accent); }
 .login-divider { display: flex; align-items: center; gap: 10px; color: var(--primary); font-size: 11px; margin: 18px 0; opacity: 0.6; }
 .login-divider::before,.login-divider::after { content:''; flex:1; height:1px; background: var(--secondary); }
-
-/* ══ HEADER ══ */
-.header {
-  background: var(--card);
-  padding: 16px 18px 12px;
-  border-bottom: 2px solid var(--secondary);
-  position: sticky; top: 0; z-index: 50;
-  box-shadow: 0 2px 12px rgba(120,80,40,0.07);
-}
+.header { background: var(--card); padding: 16px 18px 12px; border-bottom: 2px solid var(--secondary); position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 12px rgba(120,80,40,0.07); }
 .header-row { display: flex; justify-content: space-between; align-items: center; }
 .header-logo { display: flex; align-items: center; gap: 10px; }
 .header-logo img { height: 36px; border-radius: 8px; }
@@ -141,8 +76,6 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 .mode-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 600; }
 .mode-badge.admin { background: var(--secondary); color: var(--accent); }
 .mode-badge.parent { background: #eef5ee; color: #4a7a4e; }
-
-/* ══ FORMS ══ */
 .form-group { margin-bottom: 12px; }
 label { font-size: 10px; color: var(--primary); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 5px; }
 input, textarea, select {
@@ -152,19 +85,10 @@ input, textarea, select {
   background: var(--bg); color: var(--accent); outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-input:focus, textarea:focus, select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(192,127,78,0.12);
-}
+input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(192,127,78,0.12); }
 select option { background: #fff; }
 textarea { resize: vertical; min-height: 68px; }
-
-.btn {
-  display: block; width: 100%; padding: 13px;
-  border-radius: 14px; font-size: 15px; font-weight: 700;
-  font-family: 'Noto Sans TC',sans-serif;
-  border: none; cursor: pointer; transition: all 0.15s;
-}
+.btn { display: block; width: 100%; padding: 13px; border-radius: 14px; font-size: 15px; font-weight: 700; font-family: 'Noto Sans TC',sans-serif; border: none; cursor: pointer; transition: all 0.15s; }
 .btn:active { transform: scale(0.97); opacity: 0.88; }
 .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 3px 12px rgba(192,127,78,0.32); }
 .btn-success { background: var(--success); color: #fff; box-shadow: 0 3px 12px rgba(106,158,110,0.28); }
@@ -172,38 +96,16 @@ textarea { resize: vertical; min-height: 68px; }
 .btn-ghost   { background: transparent; border: 1.5px solid #e0cfc0; color: var(--primary); }
 .btn-sm      { padding: 8px 13px; font-size: 12px; width: auto; display: inline-block; border-radius: 10px; }
 .btn + .btn  { margin-top: 9px; }
-
-/* ══ TABS ══ */
 .tabs { display:flex; background: var(--card); border-bottom: 2px solid var(--secondary); overflow-x:auto; }
-.tab {
-  padding: 13px 18px; font-size: 13px; font-weight: 600;
-  color: #b09080; border: none; background: none; cursor: pointer;
-  border-bottom: 3px solid transparent; white-space: nowrap;
-  font-family: 'Noto Sans TC',sans-serif; transition: all 0.18s;
-}
+.tab { padding: 13px 18px; font-size: 13px; font-weight: 600; color: #b09080; border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; font-family: 'Noto Sans TC',sans-serif; transition: all 0.18s; }
 .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
-
-/* ══ VIEWS ══ */
 .view { display: none; padding: 14px; }
 .view.active { display: block; }
-
-/* ══ STATS ══ */
 .stats-row { display:flex; gap:10px; margin:14px 0; }
-.stat-card {
-  flex:1; background: var(--card);
-  border: 1px solid var(--secondary); border-radius: 16px; padding:14px;
-  text-align:center; box-shadow: 0 2px 8px rgba(120,80,40,0.06);
-}
+.stat-card { flex:1; background: var(--card); border: 1px solid var(--secondary); border-radius: 16px; padding:14px; text-align:center; box-shadow: 0 2px 8px rgba(120,80,40,0.06); }
 .stat-val   { font-family:'DM Mono',monospace; font-size:20px; font-weight:500; color: var(--primary); }
 .stat-label { font-size:10px; color:#b09080; margin-top:3px; }
-
-/* ══ STUDENT CARDS ══ */
-.student-card {
-  background: var(--card); border: 1px solid var(--secondary);
-  border-radius: 18px; padding: 16px; margin-bottom: 12px;
-  cursor: pointer; transition: all 0.18s;
-  box-shadow: 0 2px 10px rgba(120,80,40,0.06);
-}
+.student-card { background: var(--card); border: 1px solid var(--secondary); border-radius: 18px; padding: 16px; margin-bottom: 12px; cursor: pointer; transition: all 0.18s; box-shadow: 0 2px 10px rgba(120,80,40,0.06); }
 .student-card:active { transform: scale(0.98); }
 .student-card:hover  { border-color: var(--primary); box-shadow: 0 4px 16px rgba(192,127,78,0.14); }
 .student-name  { font-size: 17px; font-weight: 700; color: var(--accent); }
@@ -214,19 +116,11 @@ textarea { resize: vertical; min-height: 68px; }
 .positive { color: var(--success); }
 .warning  { color: var(--warning); }
 .negative { color: var(--danger); }
-
 .badge { font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; }
 .badge-ok     { background:#edf6ee; color: var(--success); border:1px solid #b8debb; }
 .badge-warn   { background:#fef5e7; color: var(--warning); border:1px solid #f0d090; }
 .badge-danger { background:#fdeaea; color: var(--danger);  border:1px solid #f0b8b8; }
-
-/* ══ TX CARDS ══ */
-.tx-card {
-  background: var(--card); border: 1px solid var(--secondary);
-  border-radius: 14px; padding: 13px 15px; margin-bottom: 8px;
-  display:flex; align-items:center; gap:13px;
-  box-shadow: 0 1px 6px rgba(120,80,40,0.05);
-}
+.tx-card { background: var(--card); border: 1px solid var(--secondary); border-radius: 14px; padding: 13px 15px; margin-bottom: 8px; display:flex; align-items:center; gap:13px; box-shadow: 0 1px 6px rgba(120,80,40,0.05); }
 .tx-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
 .tx-icon.top-up { background: #edf6ee; }
 .tx-icon.deduct { background: #fdeaea; }
@@ -237,8 +131,6 @@ textarea { resize: vertical; min-height: 68px; }
 .tx-amount { font-family:'DM Mono',monospace; font-size:16px; font-weight:600; flex-shrink:0; }
 .tx-amount.top-up { color: var(--success); }
 .tx-amount.deduct { color: var(--danger); }
-
-/* ══ DETAIL ══ */
 .detail-header  { background:var(--card); border:1px solid var(--secondary); border-radius:18px; padding:18px; margin-bottom:13px; box-shadow:0 2px 10px rgba(120,80,40,0.06); }
 .detail-name    { font-size:22px; font-weight:900; color: var(--accent); }
 .detail-note    { font-size:13px; color:#b09080; margin-top:3px; }
@@ -251,15 +143,7 @@ textarea { resize: vertical; min-height: 68px; }
 .parent-code-box{ background:var(--secondary); border:1px solid #e0cfc0; border-radius:10px; padding:11px 14px; font-family:'DM Mono',monospace; font-size:12px; color:var(--accent); text-align:center; word-break:break-all; }
 .share-row      { display:flex; gap:8px; margin-top:10px; }
 .share-row .btn { flex:1; font-size:12px; padding:9px 6px; }
-
-/* ══ PARENT PAGE ══ */
-.parent-hero {
-  background: linear-gradient(135deg, var(--primary) 0%, #e8a870 100%);
-  border-radius: 20px; padding: 24px 20px;
-  text-align: center; margin: 14px 14px 0;
-  box-shadow: 0 4px 20px rgba(192,127,78,0.28);
-  color: #fff;
-}
+.parent-hero { background: linear-gradient(135deg, var(--primary) 0%, #e8a870 100%); border-radius: 20px; padding: 24px 20px; text-align: center; margin: 14px 14px 0; box-shadow: 0 4px 20px rgba(192,127,78,0.28); color: #fff; }
 .parent-name      { font-size: 26px; font-weight: 900; }
 .parent-bal-label { font-size: 10px; opacity: 0.82; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 14px; }
 .parent-bal       { font-family:'DM Mono',monospace; font-size: 48px; font-weight: 500; line-height: 1.1; }
@@ -267,86 +151,55 @@ textarea { resize: vertical; min-height: 68px; }
 .parent-bal.positive { color: #fff; }
 .parent-bal.warning  { color: #ffe8a0; }
 .parent-bal.negative { color: #ffb8b8; }
-
-/* ══ MODAL ══ */
 .modal-overlay { display:none; position:fixed; inset:0; background:rgba(80,40,10,0.4); z-index:200; align-items:flex-end; }
 .modal-overlay.open { display:flex; }
-.modal {
-  background: var(--card); border-radius: 28px 28px 0 0;
-  border-top: 3px solid var(--secondary);
-  padding: 18px 20px 50px; width: 100%;
-  max-height: 90vh; overflow-y: auto;
-  animation: slideUp 0.24s ease;
-  box-shadow: 0 -4px 32px rgba(120,80,40,0.14);
-}
+.modal { background: var(--card); border-radius: 28px 28px 0 0; border-top: 3px solid var(--secondary); padding: 18px 20px 50px; width: 100%; max-height: 90vh; overflow-y: auto; animation: slideUp 0.24s ease; box-shadow: 0 -4px 32px rgba(120,80,40,0.14); }
 @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
 .modal-handle { width:40px; height:4px; background:#e0cfc0; border-radius:2px; margin:0 auto 18px; }
 .modal-title  { font-size:18px; font-weight:700; margin-bottom:18px; color: var(--accent); }
-
-/* ══ MISC ══ */
 .empty-state { text-align:center; padding:44px 20px; color:#c0a890; font-size:14px; }
 .empty-icon  { font-size:44px; margin-bottom:10px; }
 .error-box   { background:#fdeaea; border:1px solid #f0b8b8; border-radius:10px; padding:11px 13px; font-size:13px; color:var(--danger); margin-bottom:12px; }
 .delete-link { background:none; border:none; color:var(--danger); font-size:12px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; opacity:0.7; padding:0; }
 .footer-note { text-align:center; font-size:11px; color:#c0a890; padding:20px 0 8px; }
-
-.fab {
-  position:fixed; bottom:24px; right:20px;
-  width:56px; height:56px; border-radius:50%;
-  background: var(--primary); color:#fff;
-  font-size:26px; font-weight:700; border:none; cursor:pointer;
-  box-shadow: 0 4px 20px rgba(192,127,78,0.42);
-  display:flex; align-items:center; justify-content:center;
-  transition:transform 0.13s; z-index:50;
-}
+.fab { position:fixed; bottom:24px; right:20px; width:56px; height:56px; border-radius:50%; background: var(--primary); color:#fff; font-size:26px; font-weight:700; border:none; cursor:pointer; box-shadow: 0 4px 20px rgba(192,127,78,0.42); display:flex; align-items:center; justify-content:center; transition:transform 0.13s; z-index:50; }
 .fab:active { transform:scale(0.91); }
+@keyframes loadbar { 0%{width:0%;margin-left:0} 50%{width:80%;margin-left:10%} 100%{width:0%;margin-left:100%} }
 </style>
 </head>
 <body>
 <div id="router">
 
-<!-- ══ PAGE: LOGIN ══ -->
+<!-- PAGE: LOGIN -->
 <div id="page-login" class="page active">
-
-  <!-- Cover -->
   <div class="cover-area" id="cover-area">
     <div class="cover-bg" id="cover-bg"></div>
     <div class="cover-overlay"></div>
     <div class="cover-logo" id="cover-logo">
-      <!-- logo img injected by JS if set -->
       <div class="cover-title"  id="cover-title"></div>
       <div class="cover-subtitle" id="cover-subtitle"></div>
     </div>
   </div>
-
   <div class="login-wrap">
     <div class="login-card">
       <div id="login-error" class="error-box" style="display:none"></div>
-
       <div class="login-section-title">👤 管理員登入</div>
       <div class="form-group">
         <label>管理員密碼</label>
-        <input type="password" id="input-admin-pw" placeholder="請輸入密碼"
-               onkeydown="if(event.key==='Enter')doAdminLogin()">
+        <input type="password" id="input-admin-pw" placeholder="請輸入密碼" onkeydown="if(event.key==='Enter')doAdminLogin()">
       </div>
       <button class="btn btn-primary" onclick="doAdminLogin()">進入管理後台 →</button>
-
       <div class="login-divider">或</div>
-
       <div class="login-section-title">🏠 家長餐費查詢</div>
       <div class="form-group">
         <label>家長專屬代碼</label>
-        <input type="text" id="input-parent-code" placeholder="輸入老師給你的代碼"
-               onkeydown="if(event.key==='Enter')doParentLogin()" autocapitalize="none">
+        <input type="text" id="input-parent-code" placeholder="輸入老師給你的代碼" onkeydown="if(event.key==='Enter')doParentLogin()" autocapitalize="none">
       </div>
       <button class="btn btn-ghost" onclick="doParentLogin()">查詢孩子餐費 →</button>
     </div>
 
-    <!-- 儲值說明卡片 -->
     <div style="background:var(--card);border:1.5px solid #e8d9cc;border-radius:20px;padding:20px 20px 18px;margin-top:16px;box-shadow:0 2px 10px rgba(120,80,40,0.07)">
-      <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px">
-        💳 餐費儲值方式
-      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px">💳 餐費儲值方式</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;justify-content:space-between;align-items:center;background:var(--secondary);border-radius:10px;padding:10px 14px">
           <span style="font-size:12px;color:#b09080;font-weight:600">銀行</span>
@@ -361,32 +214,24 @@ textarea { resize: vertical; min-height: 68px; }
         </div>
         <div style="background:#fff8f0;border:1px solid #f0d8b8;border-radius:10px;padding:10px 14px">
           <div style="font-size:12px;color:var(--warning);font-weight:700;margin-bottom:3px">📌 注意事項</div>
-          <div style="font-size:12px;color:#9a6840;line-height:1.7">
-            單次儲值以 <strong>$1,000</strong> 為單位<br>
-            轉帳後請私訊末五碼
-          </div>
+          <div style="font-size:12px;color:#9a6840;line-height:1.7">單次儲值以 <strong>$1,000</strong> 為單位<br>轉帳後請私訊末五碼</div>
         </div>
         <div style="background:#fdeaea;border:1px solid #f0b8b8;border-radius:10px;padding:10px 14px;margin-top:8px">
-          <div style="font-size:12px;color:#c05a5a;font-weight:700;line-height:1.7">
-            ⚠️ 餘額不足 $200 將寄信通知，若未儲值不予訂餐
-          </div>
+          <div style="font-size:12px;color:#c05a5a;font-weight:700;line-height:1.7">⚠️ 餘額不足 $200 將自動寄信通知，若未儲值不予訂餐</div>
         </div>
       </div>
     </div>
-
     <div class="footer-note" id="footer-note"></div>
   </div>
 </div>
 
-<!-- ══ PAGE: ADMIN ══ -->
+<!-- PAGE: ADMIN -->
 <div id="page-admin" class="page">
   <div class="header">
     <div class="header-row">
       <div class="header-logo">
         <img id="admin-logo-img" src="" style="display:none">
-        <div class="header-logo-text" id="admin-logo-text">
-          載入中<small>管理後台</small>
-        </div>
+        <div class="header-logo-text" id="admin-logo-text">載入中<small>管理後台</small></div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <span class="mode-badge admin">管理員</span>
@@ -413,6 +258,20 @@ textarea { resize: vertical; min-height: 68px; }
       <div class="form-group"><label>確認新密碼</label><input type="password" id="confirm-pw" placeholder="再次輸入"></div>
       <button class="btn btn-primary" onclick="changePassword()">更改密碼</button>
     </div>
+
+    <div class="section-title">自動寄信設定</div>
+    <div class="detail-header" style="font-size:13px;color:#9a6840;line-height:1.9">
+      <div style="font-weight:700;color:var(--accent);margin-bottom:10px">📧 Google Apps Script 自動寄信</div>
+      系統每天早上 06:00 自動檢查餘額，低於 $200 且尚未通知的學生將自動收到 Email。<br>
+      儲值後會自動重置通知狀態，下次餘額再度不足時才會再寄。<br><br>
+      <div style="font-weight:700;color:var(--accent);margin-bottom:6px">設定步驟：</div>
+      1. 前往 <strong>script.google.com</strong> 新增專案<br>
+      2. 將下方程式碼貼入並儲存<br>
+      3. 設定觸發條件：每天 05:00–06:00 執行<br>
+      4. 首次執行時授權 Gmail 權限<br><br>
+      <button class="btn btn-ghost" onclick="copyGasCode()" style="font-size:12px;padding:8px 14px;width:auto">📋 複製 Apps Script 程式碼</button>
+    </div>
+
     <div class="section-title">說明</div>
     <div class="detail-header" style="font-size:13px;color:#b09080;line-height:1.9">
       每位學生有專屬代碼，進入學生詳情可複製代碼或連結給家長。<br>
@@ -427,38 +286,19 @@ textarea { resize: vertical; min-height: 68px; }
   <button class="fab" id="main-fab" onclick="openAddStudent()">＋</button>
 </div>
 
-<!-- ══ PAGE: PARENT ══ -->
+<!-- PAGE: PARENT -->
 <div id="page-parent" class="page">
   <div class="header">
     <div class="header-row">
       <div class="header-logo">
         <img id="parent-logo-img" src="" style="display:none">
-        <div class="header-logo-text" id="parent-logo-text">
-          載入中<small>家長查詢</small>
-        </div>
+        <div class="header-logo-text" id="parent-logo-text">載入中<small>家長查詢</small></div>
       </div>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()" style="padding:5px 10px">登出</button>
     </div>
   </div>
   <div id="parent-content"></div>
 </div>
-
-
-<!-- Modal: Low Balance Alert -->
-<div class="modal-overlay" id="modal-lowbal">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div style="text-align:center;margin-bottom:18px">
-      <div style="font-size:44px;margin-bottom:8px">⚠️</div>
-      <div class="modal-title" style="margin-bottom:4px" id="lowbal-title">餘額不足通知</div>
-      <div style="font-size:13px;color:#b09080" id="lowbal-desc"></div>
-    </div>
-    <div style="background:#fff8f0;border:1px solid #f0d8b8;border-radius:12px;padding:14px;margin-bottom:18px;font-size:13px;color:#9a6840;line-height:1.8" id="lowbal-preview"></div>
-    <button class="btn btn-primary" id="lowbal-gmail-btn" onclick="openGmailDraft()">📧 開啟 Gmail 草稿</button>
-    <button class="btn btn-ghost" onclick="closeModal('modal-lowbal')" style="margin-top:10px">稍後再說</button>
-  </div>
-</div>
-</div><!-- /router -->
 
 <!-- Modal: Add Student -->
 <div class="modal-overlay" id="modal-student">
@@ -467,10 +307,24 @@ textarea { resize: vertical; min-height: 68px; }
     <div class="modal-title">新增學生 🌱</div>
     <div id="student-form-error" class="error-box" style="display:none"></div>
     <div class="form-group"><label>學生姓名 *</label><input type="text" id="input-name" placeholder="請輸入姓名"></div>
-    <div class="form-group"><label>家長 Email（餘額不足時通知用）</label><input type="email" id="input-email" placeholder="例：parent@gmail.com"></div>
+    <div class="form-group"><label>家長 Email（餘額不足時自動寄信）</label><input type="email" id="input-email" placeholder="例：parent@gmail.com"></div>
     <div class="form-group"><label>備註</label><textarea id="input-note" placeholder="過敏食材、特殊需求等…"></textarea></div>
     <button class="btn btn-primary" onclick="saveStudent()">新增學生</button>
     <button class="btn btn-ghost"   onclick="closeModal('modal-student')">取消</button>
+  </div>
+</div>
+
+<!-- Modal: Edit Student -->
+<div class="modal-overlay" id="modal-edit-student">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">編輯學生資料 ✏️</div>
+    <div id="edit-student-error" class="error-box" style="display:none"></div>
+    <div class="form-group"><label>學生姓名 *</label><input type="text" id="edit-name" placeholder="請輸入姓名"></div>
+    <div class="form-group"><label>家長 Email（餘額不足時自動寄信）</label><input type="email" id="edit-email" placeholder="例：parent@gmail.com"></div>
+    <div class="form-group"><label>備註</label><textarea id="edit-note" placeholder="過敏食材、特殊需求等…"></textarea></div>
+    <button class="btn btn-primary" onclick="saveEditStudent()">儲存</button>
+    <button class="btn btn-ghost"   onclick="closeModal('modal-edit-student')">取消</button>
   </div>
 </div>
 
@@ -494,18 +348,26 @@ textarea { resize: vertical; min-height: 68px; }
   </div>
 </div>
 
+</div><!-- /router -->
+
+<!-- Loading overlay -->
+<div id="loading-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+  <div style="font-size:36px">🍱</div>
+  <div style="font-size:15px;font-weight:700;color:var(--primary)">連接雲端中…</div>
+  <div style="width:48px;height:4px;background:#e8d9cc;border-radius:2px;overflow:hidden">
+    <div style="height:100%;background:var(--primary);border-radius:2px;animation:loadbar 1.2s ease-in-out infinite"></div>
+  </div>
+</div>
+
 <script>
 // ══ APPLY CONFIG ══
 (function applyConfig() {
   const C = CONFIG;
   const root = document.documentElement;
   Object.entries(C.colors).forEach(([k,v]) => root.style.setProperty('--'+k, v));
-
   document.getElementById('cover-title').textContent    = C.coverTitle;
   document.getElementById('cover-subtitle').textContent = C.coverSubtitle;
-  if (C.coverImageUrl) {
-    document.getElementById('cover-bg').style.backgroundImage = `url('${C.coverImageUrl}')`;
-  }
+  if (C.coverImageUrl) document.getElementById('cover-bg').style.backgroundImage = `url('${C.coverImageUrl}')`;
   if (C.logoImageUrl) {
     const img = document.createElement('img');
     img.src = C.logoImageUrl; img.style.cssText='height:64px;margin-bottom:10px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.2)';
@@ -514,10 +376,7 @@ textarea { resize: vertical; min-height: 68px; }
   ['admin','parent'].forEach(p => {
     const txt = document.getElementById(p+'-logo-text');
     txt.childNodes[0].textContent = C.systemName.replace('訂餐系統','').trim();
-    if (C.logoImageUrl) {
-      const img = document.getElementById(p+'-logo-img');
-      img.src = C.logoImageUrl; img.style.display='block';
-    }
+    if (C.logoImageUrl) { const img = document.getElementById(p+'-logo-img'); img.src = C.logoImageUrl; img.style.display='block'; }
   });
   document.title = C.systemName;
   document.getElementById('footer-note').textContent = C.footerNote;
@@ -543,8 +402,7 @@ async function getDb() {
   return _db;
 }
 
-const KEYS = { students:'smart_students', txs:'smart_txs', pw:'smart_admin_pw' };
-
+const KEYS = { students:'smart_students', txs:'smart_txs', pw:'smart_admin_pw', notified:'smart_notified' };
 let _cache = null;
 
 async function loadCloud() {
@@ -554,10 +412,7 @@ async function loadCloud() {
     const snap = await db.getDoc(ref);
     _cache = snap.exists() ? snap.data() : {};
     return _cache;
-  } catch(e) {
-    console.warn('Firebase read failed:', e);
-    return null;
-  }
+  } catch(e) { console.warn('Firebase read failed:', e); return null; }
 }
 
 async function saveCloud(data) {
@@ -566,9 +421,7 @@ async function saveCloud(data) {
     const ref = db.doc(db.fs, 'smartmeal', 'data');
     await db.setDoc(ref, data);
     _cache = data;
-  } catch(e) {
-    console.warn('Firebase write failed:', e);
-  }
+  } catch(e) { console.warn('Firebase write failed:', e); }
 }
 
 async function cGet(key) {
@@ -585,7 +438,7 @@ async function cSet(key, val) {
 }
 
 // ══ STATE ══
-let S = { students:[], txs:[], pw:CONFIG.defaultPassword, mode:null, sid:null, tab:'students' };
+let S = { students:[], txs:[], pw:CONFIG.defaultPassword, notified:{}, mode:null, sid:null, tab:'students', editSid:null };
 
 // ══ ROUTER ══
 let _cur = 'login';
@@ -657,7 +510,7 @@ function parentUrl(code){ const u=new URL(window.location.href.split('?')[0]); u
 // ══ RENDER — LIST ══
 function renderList() {
   const total=S.students.reduce((s,st)=>s+bal(st.id),0);
-  const low=S.students.filter(st=>bal(st.id)<100).length;
+  const low=S.students.filter(st=>bal(st.id)<200).length;
   document.getElementById('admin-stats').innerHTML=`
     <div class="stat-card"><div class="stat-val">${S.students.length}</div><div class="stat-label">學生人數</div></div>
     <div class="stat-card"><div class="stat-val">$${total.toLocaleString()}</div><div class="stat-label">總餘額</div></div>
@@ -666,10 +519,11 @@ function renderList() {
   if (!S.students.length){ el.innerHTML=`<div class="empty-state"><div class="empty-icon">🌱</div>尚未新增學生<br>點右下角 ＋ 開始</div>`; return; }
   el.innerHTML=S.students.map(st=>{
     const b=bal(st.id),cl=bc(b);
-    const badge=b<0?'<span class="badge badge-danger">餘額不足</span>':b<100?'<span class="badge badge-warn">偏低</span>':'<span class="badge badge-ok">正常</span>';
+    const notifiedBadge = S.notified[st.id] ? '<span class="badge" style="background:#fff0e8;color:#c07f4e;border:1px solid #f0c8a0;margin-left:6px">已通知</span>' : '';
+    const badge=b<0?'<span class="badge badge-danger">餘額不足</span>':b<200?'<span class="badge badge-warn">偏低</span>':'<span class="badge badge-ok">正常</span>';
     return `<div class="student-card" onclick="showDetail('${st.id}')">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><div class="student-name">${st.name}</div><div class="student-note">${st.note||'無備註'}</div></div>${badge}
+        <div><div class="student-name">${st.name}${notifiedBadge}</div><div class="student-note">${st.note||'無備註'}</div></div>${badge}
       </div>
       <div class="balance-row">
         <div><div class="balance-label">目前餘額</div><div class="balance-amount ${cl}">$${b.toLocaleString()}</div></div>
@@ -694,16 +548,27 @@ function renderDetail(sid) {
   const b=bal(sid);
   const txs=S.txs.filter(t=>t.sid===sid).sort((a,c)=>c.date.localeCompare(a.date));
   const url=parentUrl(st.code);
+  const notifiedInfo = S.notified[sid]
+    ? `<div style="margin-top:8px;background:#fff0e8;border:1px solid #f0c8a0;border-radius:8px;padding:8px 12px;font-size:12px;color:#c07f4e">📧 已寄送餘額不足通知（儲值後將自動重置）</div>`
+    : '';
   document.getElementById('detail-content').innerHTML=`
     <div class="detail-header">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><div class="detail-name">${st.name}</div><div class="detail-note">${st.note||'無備註'}</div>${st.email?`<div class="detail-note" style="margin-top:2px">✉️ ${st.email}</div>`:''}</div>
-        <button class="delete-link" onclick="delStudent('${sid}')">刪除學生</button>
+        <div>
+          <div class="detail-name">${st.name}</div>
+          <div class="detail-note">${st.note||'無備註'}</div>
+          ${st.email?`<div class="detail-note" style="margin-top:2px">✉️ ${st.email}</div>`:'<div class="detail-note" style="margin-top:2px;color:var(--warning)">⚠️ 尚未填寫 Email</div>'}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <button class="delete-link" onclick="delStudent('${sid}')">刪除學生</button>
+          <button class="btn btn-ghost btn-sm" onclick="openEditStudent('${sid}')" style="font-size:11px;padding:5px 10px">✏️ 編輯資料</button>
+        </div>
       </div>
       <div class="detail-balance">
         <div class="balance-label">目前餘額</div>
         <div class="balance-big ${bc(b)}">$${b.toLocaleString()}</div>
       </div>
+      ${notifiedInfo}
       <div class="section-title" style="margin-top:14px">家長專屬連結</div>
       <div class="parent-code-box">代碼：${st.code}</div>
       <div class="share-row">
@@ -745,7 +610,7 @@ function renderParent(sid) {
       ${st.note?`<div class="parent-note">${st.note}</div>`:''}
       <div class="parent-bal-label">目前餐費餘額</div>
       <div class="parent-bal ${bc(b)}">$${b.toLocaleString()}</div>
-      ${b<100?`<div style="margin-top:10px;font-size:13px;font-weight:700">${b<0?'⚠️ 餘額不足，請盡快儲值':'⚠️ 餘額偏低，建議儲值'}</div>`:''}
+      ${b<200?`<div style="margin-top:10px;font-size:13px;font-weight:700">${b<0?'⚠️ 餘額不足，請盡快儲值':'⚠️ 餘額偏低，建議儲值'}</div>`:''}
     </div>
     <div style="padding:14px">
       <div class="section-title">交易明細（${txs.length} 筆）</div>
@@ -755,10 +620,69 @@ function renderParent(sid) {
 }
 
 // ══ CRUD ══
-function openAddStudent(){ document.getElementById('input-name').value=''; document.getElementById('input-email').value=''; document.getElementById('input-note').value=''; document.getElementById('student-form-error').style.display='none'; openModal('modal-student'); }
-async function saveStudent(){ const name=document.getElementById('input-name').value.trim(); if(!name){showErr('student-form-error','請輸入學生姓名');return;} S.students.push({id:gid(),name,email:document.getElementById('input-email').value.trim(),note:document.getElementById('input-note').value.trim(),code:gcode()}); await cSet(KEYS.students,S.students); closeModal('modal-student'); renderList(); }
-async function delStudent(sid){ if(!confirm('確定刪除此學生及所有交易記錄？'))return; S.students=S.students.filter(s=>s.id!==sid); S.txs=S.txs.filter(t=>t.sid!==sid); await cSet(KEYS.students,S.students); await cSet(KEYS.txs,S.txs); backToList(); }
-function openTx(sid,type){ S.sid=sid; const st=S.students.find(s=>s.id===sid); document.getElementById('tx-type').value=type; document.getElementById('tx-amount').value=''; document.getElementById('tx-date').value=today(); document.getElementById('tx-note').value=''; document.getElementById('tx-modal-title').textContent=`${st.name} — ${type==='top-up'?'💰 儲值':'🍽 扣款'}`; document.getElementById('tx-form-error').style.display='none'; openModal('modal-tx'); }
+function openAddStudent(){
+  document.getElementById('input-name').value='';
+  document.getElementById('input-email').value='';
+  document.getElementById('input-note').value='';
+  document.getElementById('student-form-error').style.display='none';
+  openModal('modal-student');
+}
+
+async function saveStudent(){
+  const name=document.getElementById('input-name').value.trim();
+  if(!name){showErr('student-form-error','請輸入學生姓名');return;}
+  S.students.push({id:gid(),name,email:document.getElementById('input-email').value.trim(),note:document.getElementById('input-note').value.trim(),code:gcode()});
+  await cSet(KEYS.students,S.students);
+  closeModal('modal-student');
+  renderList();
+}
+
+// ── 編輯學生 ──
+function openEditStudent(sid) {
+  const st = S.students.find(s=>s.id===sid);
+  if (!st) return;
+  S.editSid = sid;
+  document.getElementById('edit-name').value  = st.name  || '';
+  document.getElementById('edit-email').value = st.email || '';
+  document.getElementById('edit-note').value  = st.note  || '';
+  document.getElementById('edit-student-error').style.display='none';
+  openModal('modal-edit-student');
+}
+
+async function saveEditStudent() {
+  const name = document.getElementById('edit-name').value.trim();
+  if (!name) { showErr('edit-student-error','請輸入學生姓名'); return; }
+  const email = document.getElementById('edit-email').value.trim();
+  const note  = document.getElementById('edit-note').value.trim();
+  S.students = S.students.map(s => s.id===S.editSid ? {...s, name, email, note} : s);
+  await cSet(KEYS.students, S.students);
+  closeModal('modal-edit-student');
+  renderDetail(S.editSid);
+}
+
+async function delStudent(sid){
+  if(!confirm('確定刪除此學生及所有交易記錄？'))return;
+  S.students=S.students.filter(s=>s.id!==sid);
+  S.txs=S.txs.filter(t=>t.sid!==sid);
+  delete S.notified[sid];
+  await cSet(KEYS.students,S.students);
+  await cSet(KEYS.txs,S.txs);
+  await cSet(KEYS.notified,S.notified);
+  backToList();
+}
+
+function openTx(sid,type){
+  S.sid=sid;
+  const st=S.students.find(s=>s.id===sid);
+  document.getElementById('tx-type').value=type;
+  document.getElementById('tx-amount').value='';
+  document.getElementById('tx-date').value=today();
+  document.getElementById('tx-note').value='';
+  document.getElementById('tx-modal-title').textContent=`${st.name} — ${type==='top-up'?'💰 儲值':'🍽 扣款'}`;
+  document.getElementById('tx-form-error').style.display='none';
+  openModal('modal-tx');
+}
+
 async function saveTx(){
   const amount=parseInt(document.getElementById('tx-amount').value);
   const date=document.getElementById('tx-date').value;
@@ -767,31 +691,86 @@ async function saveTx(){
   const txType=document.getElementById('tx-type').value;
   S.txs.push({id:gid(),sid:S.sid,type:txType,amount,date,note:document.getElementById('tx-note').value.trim()});
   await cSet(KEYS.txs,S.txs);
+
+  // 儲值 → 重置通知狀態
+  if (txType==='top-up') {
+    delete S.notified[S.sid];
+    await cSet(KEYS.notified, S.notified);
+  }
+
   closeModal('modal-tx');
   renderDetail(S.sid);
-  if(txType==='deduct'){
-    const newBal=bal(S.sid);
-    if(newBal<200){ showLowBalAlert(S.sid, newBal); }
+}
+
+async function delTx(tid){
+  if(!confirm('確定刪除此筆記錄？'))return;
+  S.txs=S.txs.filter(t=>t.id!==tid);
+  await cSet(KEYS.txs,S.txs);
+  renderDetail(S.sid);
+}
+
+async function changePassword(){
+  const np=document.getElementById('new-pw').value;
+  const cp=document.getElementById('confirm-pw').value;
+  if(!np){alert('請輸入新密碼');return;}
+  if(np!==cp){alert('兩次密碼不一致');return;}
+  S.pw=np;
+  await cSet(KEYS.pw,np);
+  document.getElementById('new-pw').value='';
+  document.getElementById('confirm-pw').value='';
+  alert('✅ 密碼已更改！');
+}
+
+// ══ APPS SCRIPT CODE ══
+function copyGasCode() {
+  const code = `// 思馬特訂餐系統 — 自動寄信 Apps Script
+// 設定觸發條件：每天 05:00–06:00 執行
+
+const FIREBASE_PROJECT = "smart-meal-94e36";
+const FIREBASE_API_KEY = "AIzaSyAaEspVnjvAit5rS-B6_4oCVqrJ3AlmE-Y";
+const SENDER_NAME = "思馬特家教班";
+const LOW_BAL_THRESHOLD = 200;
+
+function checkAndNotify() {
+  const baseUrl = \`https://firestore.googleapis.com/v1/projects/\${FIREBASE_PROJECT}/databases/(default)/documents/smartmeal/data?key=\${FIREBASE_API_KEY}\`;
+
+  // 讀取資料
+  const res = UrlFetchApp.fetch(baseUrl);
+  const json = JSON.parse(res.getContentText());
+  const fields = json.fields || {};
+
+  const students = parseFirestoreArray(fields.smart_students);
+  const txs      = parseFirestoreArray(fields.smart_txs);
+  const notified = parseFirestoreMap(fields.smart_notified);
+
+  let changed = false;
+
+  students.forEach(st => {
+    if (!st.email || !st.email.includes('@')) return;
+    if (notified[st.id]) return; // 已通知過，跳過
+
+    const balance = txs
+      .filter(t => t.sid === st.id)
+      .reduce((s, t) => t.type === 'top-up' ? s + t.amount : s - t.amount, 0);
+
+    if (balance < LOW_BAL_THRESHOLD) {
+      sendLowBalEmail(st, balance);
+      notified[st.id] = true;
+      changed = true;
+      Logger.log(\`寄信給 \${st.name} (\${st.email})，餘額 $\${balance}\`);
+    }
+  });
+
+  if (changed) {
+    saveNotified(baseUrl, json, notified);
   }
 }
-async function delTx(tid){ if(!confirm('確定刪除此筆記錄？'))return; S.txs=S.txs.filter(t=>t.id!==tid); await cSet(KEYS.txs,S.txs); renderDetail(S.sid); }
-async function changePassword(){ const np=document.getElementById('new-pw').value; const cp=document.getElementById('confirm-pw').value; if(!np){alert('請輸入新密碼');return;} if(np!==cp){alert('兩次密碼不一致');return;} S.pw=np; await cSet(KEYS.pw,np); document.getElementById('new-pw').value=''; document.getElementById('confirm-pw').value=''; alert('✅ 密碼已更改！'); }
 
-// ══ LOW BALANCE ALERT ══
-let _lowBalSid = null;
-function showLowBalAlert(sid, currentBal) {
-  const st = S.students.find(s=>s.id===sid);
-  if (!st) return;
-  _lowBalSid = sid;
-  document.getElementById('lowbal-title').textContent = `${st.name} 餘額偏低`;
-  document.getElementById('lowbal-desc').textContent = `目前餘額 $${currentBal.toLocaleString()}，低於 $200`;
+function sendLowBalEmail(st, balance) {
+  const subject = \`【思馬特訂餐】\${st.name} 餐費餘額不足通知\`;
+  const body = \`親愛的家長您好，
 
-  const hasEmail = st.email && st.email.includes('@');
-  const subject = encodeURIComponent(`【思馬特訂餐】${st.name} 餐費餘額不足通知`);
-  const body = encodeURIComponent(
-`親愛的家長您好，
-
-${st.name} 的餐費餘額目前為 $${currentBal.toLocaleString()}，已低於 $200，請記得儲值，以免影響訂餐。
+\${st.name} 的餐費餘額目前為 $\${balance}，已低於 $\${LOW_BAL_THRESHOLD}，請記得儲值，以免影響訂餐。
 
 儲值方式：
 🏦 銀行：中信 822
@@ -799,56 +778,82 @@ ${st.name} 的餐費餘額目前為 $${currentBal.toLocaleString()}，已低於 
 📌 單次儲值以 $1,000 為單位，轉帳後請私訊末五碼
 
 感謝您的配合！
-思馬特家教班`
-  );
+\${SENDER_NAME}\`;
 
-  const previewText = `收件人：${hasEmail ? st.email : '（尚未填寫家長 email）'}
-主旨：【思馬特訂餐】${st.name} 餐費餘額不足通知
-
-親愛的家長您好，
-${st.name} 的餐費餘額目前為 $${currentBal.toLocaleString()}，已低於 $200，請記得儲值。`;
-  document.getElementById('lowbal-preview').style.whiteSpace='pre-line';
-  document.getElementById('lowbal-preview').textContent = previewText;
-
-  const btn = document.getElementById('lowbal-gmail-btn');
-  if (hasEmail) {
-    btn.style.opacity='1'; btn.style.pointerEvents='auto';
-    btn._gmailUrl = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(st.email)}&su=${subject}&body=${body}`;
-  } else {
-    btn.style.opacity='0.4'; btn.style.pointerEvents='none';
-    btn._gmailUrl = '';
-  }
-  openModal('modal-lowbal');
+  GmailApp.sendEmail(st.email, subject, body, { name: SENDER_NAME });
 }
 
-function openGmailDraft() {
-  const btn = document.getElementById('lowbal-gmail-btn');
-  if (btn._gmailUrl) window.open(btn._gmailUrl, '_blank');
+function saveNotified(baseUrl, originalJson, notified) {
+  const notifiedFields = {};
+  Object.keys(notified).forEach(k => {
+    notifiedFields[k] = { booleanValue: true };
+  });
+
+  const patchBody = {
+    fields: {
+      ...originalJson.fields,
+      smart_notified: { mapValue: { fields: notifiedFields } }
+    }
+  };
+
+  UrlFetchApp.fetch(baseUrl.split('?')[0] + '?key=' + FIREBASE_API_KEY, {
+    method: 'PATCH',
+    contentType: 'application/json',
+    payload: JSON.stringify(patchBody)
+  });
+}
+
+function parseFirestoreArray(field) {
+  if (!field || !field.arrayValue || !field.arrayValue.values) return [];
+  return field.arrayValue.values.map(v => {
+    const obj = {};
+    const map = v.mapValue && v.mapValue.fields ? v.mapValue.fields : {};
+    Object.keys(map).forEach(k => {
+      const f = map[k];
+      if (f.stringValue !== undefined) obj[k] = f.stringValue;
+      else if (f.integerValue !== undefined) obj[k] = parseInt(f.integerValue);
+      else if (f.doubleValue !== undefined) obj[k] = f.doubleValue;
+      else if (f.booleanValue !== undefined) obj[k] = f.booleanValue;
+    });
+    return obj;
+  });
+}
+
+function parseFirestoreMap(field) {
+  if (!field || !field.mapValue || !field.mapValue.fields) return {};
+  const result = {};
+  Object.keys(field.mapValue.fields).forEach(k => {
+    result[k] = field.mapValue.fields[k].booleanValue || false;
+  });
+  return result;
+}`;
+
+  navigator.clipboard.writeText(code)
+    .then(()=>alert('✅ 已複製 Apps Script 程式碼！\n\n請前往 script.google.com 新增專案並貼上。'))
+    .catch(()=>alert('複製失敗，請手動複製'));
 }
 
 // ══ MODALS ══
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(el=>{ el.addEventListener('click',e=>{ if(e.target===el) el.classList.remove('open'); }); });
+document.querySelectorAll('.modal-overlay').forEach(el=>{
+  el.addEventListener('click',e=>{ if(e.target===el) el.classList.remove('open'); });
+});
 function copyText(text,msg){ navigator.clipboard.writeText(text).then(()=>alert(msg)).catch(()=>alert(text)); }
 
 // ══ BOOT ══
 async function init() {
   const overlay = document.getElementById('loading-overlay');
   if (overlay) overlay.style.display = 'flex';
-
   try {
     await loadCloud();
     S.students = (await cGet(KEYS.students)) || [];
     S.txs      = (await cGet(KEYS.txs))      || [];
     S.pw       = (await cGet(KEYS.pw))        || CONFIG.defaultPassword;
+    S.notified = (await cGet(KEYS.notified))  || {};
   } catch(e) {
-    console.warn('Init error:', e);
-    S.students = [];
-    S.txs      = [];
-    S.pw       = CONFIG.defaultPassword;
+    S.students = []; S.txs = []; S.pw = CONFIG.defaultPassword; S.notified = {};
   }
-
   if (overlay) overlay.style.display = 'none';
 
   const code = new URLSearchParams(window.location.search).get('code');
@@ -859,21 +864,5 @@ async function init() {
 }
 init();
 </script>
-
-<!-- Loading overlay -->
-<div id="loading-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px">
-  <div style="font-size:36px">🍱</div>
-  <div style="font-size:15px;font-weight:700;color:var(--primary)">連接雲端中…</div>
-  <div style="width:48px;height:4px;background:#e8d9cc;border-radius:2px;overflow:hidden">
-    <div style="height:100%;background:var(--primary);border-radius:2px;animation:loadbar 1.2s ease-in-out infinite"></div>
-  </div>
-</div>
-<style>
-@keyframes loadbar {
-  0%   { width:0%;   margin-left:0; }
-  50%  { width:80%;  margin-left:10%; }
-  100% { width:0%;   margin-left:100%; }
-}
-</style>
 </body>
 </html>
